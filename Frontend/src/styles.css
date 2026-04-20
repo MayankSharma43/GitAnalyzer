@@ -1,0 +1,325 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+/* Safelist dynamic severity classes used across pages */
+@source inline("border-l-danger border-l-warning border-l-success border-l-violet text-danger text-warning text-success text-violet-glow text-cyan border-danger/40 border-warning/40 border-success/40 bg-danger/10 bg-warning/10 bg-success/10 bg-danger/15 bg-warning/15 bg-success/15");
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-violet: var(--violet);
+  --color-violet-glow: var(--violet-glow);
+  --color-cyan: var(--cyan);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-hairline: var(--hairline);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.5rem;
+
+  /* Brand — black-first, violet-tinted */
+  --background: oklch(0.09 0.005 270);
+  --foreground: oklch(0.98 0 0);
+
+  --surface: oklch(0.12 0.008 270);
+  --surface-2: oklch(0.15 0.01 270);
+  --hairline: oklch(0.20 0.012 270);
+
+  --card: var(--surface);
+  --card-foreground: oklch(0.98 0 0);
+  --popover: var(--surface-2);
+  --popover-foreground: oklch(0.98 0 0);
+
+  --violet: oklch(0.58 0.24 295);
+  --violet-glow: oklch(0.74 0.18 300);
+  --cyan: oklch(0.78 0.15 200);
+  --success: oklch(0.72 0.18 155);
+  --warning: oklch(0.80 0.17 80);
+  --danger: oklch(0.66 0.24 25);
+
+  --primary: var(--violet);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: var(--surface-2);
+  --secondary-foreground: oklch(0.98 0 0);
+  --muted: var(--surface-2);
+  --muted-foreground: oklch(0.62 0.02 270);
+  --accent: oklch(0.20 0.04 290);
+  --accent-foreground: oklch(0.98 0 0);
+  --destructive: var(--danger);
+  --destructive-foreground: oklch(0.98 0 0);
+
+  --border: var(--hairline);
+  --input: oklch(0.18 0.012 270);
+  --ring: var(--violet-glow);
+
+  --chart-1: var(--violet-glow);
+  --chart-2: var(--cyan);
+  --chart-3: var(--warning);
+  --chart-4: var(--success);
+  --chart-5: var(--danger);
+
+  --sidebar: oklch(0.07 0.005 270);
+  --sidebar-foreground: oklch(0.92 0.01 270);
+  --sidebar-primary: var(--violet);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: var(--surface);
+  --sidebar-accent-foreground: oklch(0.98 0 0);
+  --sidebar-border: var(--hairline);
+  --sidebar-ring: var(--violet-glow);
+
+  --gradient-violet: linear-gradient(135deg, oklch(0.58 0.24 295), oklch(0.74 0.18 300));
+  --gradient-violet-cyan: linear-gradient(135deg, oklch(0.58 0.24 295), oklch(0.78 0.15 200));
+  --shadow-violet: 0 0 30px color-mix(in oklab, var(--violet) 38%, transparent);
+  --shadow-card: 0 1px 0 0 color-mix(in oklab, white 3%, transparent) inset, 0 8px 24px -12px black;
+}
+
+.dark {
+  /* Same as root — app is dark-only */
+}
+
+@layer base {
+  *, *::before, *::after {
+    border-color: var(--color-border);
+  }
+
+  html, body {
+    background-color: #070709;
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    /* Background handled by <LiveBackground /> — keep body itself plain */
+    background-image: none;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.03em;
+    font-weight: 800;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--violet-glow) 50%, transparent);
+    color: white;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: #0a0a0a; }
+  ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: #7c3aed; }
+
+  /* Replace default focus outlines */
+  :focus { outline: none; }
+  :focus-visible {
+    outline: 2px solid color-mix(in oklab, var(--violet) 40%, transparent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Hide native cursor on devices using the custom one */
+  html.custom-cursor,
+  html.custom-cursor * {
+    cursor: none !important;
+  }
+}
+
+@layer utilities {
+  .font-mono { font-family: var(--font-mono); }
+  .text-violet { color: var(--violet); }
+  .text-violet-glow { color: var(--violet-glow); }
+  .text-cyan { color: var(--cyan); }
+  .text-success { color: var(--success); }
+  .text-warning { color: var(--warning); }
+  .text-danger { color: var(--danger); }
+  .bg-violet { background-color: var(--violet); }
+  .bg-violet-glow { background-color: var(--violet-glow); }
+  .bg-cyan { background-color: var(--cyan); }
+  .bg-success { background-color: var(--success); }
+  .bg-warning { background-color: var(--warning); }
+  .bg-danger { background-color: var(--danger); }
+  .bg-surface { background-color: var(--surface); }
+  .bg-surface-2 { background-color: var(--surface-2); }
+  .border-hairline { border-color: var(--hairline); }
+  .gradient-violet { background-image: var(--gradient-violet); }
+  .gradient-violet-cyan { background-image: var(--gradient-violet-cyan); }
+  .shadow-violet { box-shadow: var(--shadow-violet); }
+  .shadow-card { box-shadow: var(--shadow-card); }
+
+  .glow-violet {
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--violet-glow) 40%, transparent),
+      0 0 30px -5px color-mix(in oklab, var(--violet-glow) 50%, transparent);
+  }
+
+  .panel {
+    background-color: #0d0d0d;
+    border: 1px solid #1a1a1a;
+    border-radius: var(--radius);
+    transition: border-color 200ms ease, background-color 200ms ease;
+  }
+  .panel:hover {
+    border-color: color-mix(in oklab, var(--violet) 50%, #1a1a1a);
+  }
+
+  /* Pulse for the status dot */
+  .status-pulse {
+    animation: status-pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes status-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--success) 60%, transparent); transform: scale(1); }
+    50% { box-shadow: 0 0 0 6px transparent; transform: scale(1.15); }
+  }
+
+  /* Blinking caret */
+  .blink-caret::after {
+    content: "▋";
+    margin-left: 4px;
+    animation: blink 1s step-end infinite;
+    color: var(--violet-glow);
+  }
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+
+  /* Loading bar — 2px line at top of any container */
+  .loading-bar {
+    position: relative;
+    overflow: hidden;
+  }
+  .loading-bar::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    height: 2px;
+    width: 30%;
+    background: var(--violet);
+    animation: loading-slide 1.4s ease-in-out infinite;
+  }
+  @keyframes loading-slide {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(400%); }
+  }
+
+  /* Diagonal slash divider used in claimed/actual banner */
+  .slash-left {
+    clip-path: polygon(0 0, 100% 0, calc(100% - 60px) 100%, 0 100%);
+  }
+  .slash-right {
+    clip-path: polygon(60px 0, 100% 0, 100% 100%, 0 100%);
+  }
+
+  /* Animated gradient button */
+  .btn-initiate {
+    background: linear-gradient(110deg, #7c3aed, #4f46e5, #7c3aed, #4f46e5);
+    background-size: 300% 100%;
+    animation: shift 6s linear infinite;
+  }
+  .btn-initiate:hover { animation-duration: 1.6s; }
+  @keyframes shift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+  }
+
+  /* Underline-on-focus for terminal inputs */
+  .term-input {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #2a2a2a;
+    border-radius: 0;
+    position: relative;
+  }
+  .term-input-wrap { position: relative; }
+  .term-input-wrap::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 0;
+    height: 2px;
+    background: var(--violet);
+    transition: width 0.4s ease;
+  }
+  .term-input-wrap:focus-within::after { width: 100%; }
+
+  /* Sidebar nav active border slide */
+  .nav-active-bar {
+    position: absolute;
+    left: 0; top: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--violet);
+    transform-origin: top;
+    animation: nav-slide 0.3s ease-out forwards;
+  }
+  @keyframes nav-slide {
+    from { transform: scaleY(0); }
+    to { transform: scaleY(1); }
+  }
+
+  /* Data flicker for auditing log lines */
+  .flicker { animation: flicker 0.4s ease-in-out; }
+  @keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* Dashed flowing connector for roadmap */
+  .flow-dash {
+    stroke-dasharray: 6 6;
+    animation: flow 1.5s linear infinite;
+  }
+  @keyframes flow {
+    to { stroke-dashoffset: -24; }
+  }
+}
