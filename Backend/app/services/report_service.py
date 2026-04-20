@@ -17,7 +17,7 @@ from app.services.scoring import ScoringResult
 
 logger = logging.getLogger(__name__)
 
-CLAUDE_MODEL = "claude-sonnet-4-5"
+CLAUDE_MODEL = "claude-3-5-sonnet-20241022"
 
 SYSTEM_PROMPT = """You are a brutally honest senior staff engineer conducting a code review for a developer career audit platform.
 
@@ -163,27 +163,40 @@ async def generate_report(
     Call Anthropic Claude and parse the structured JSON report.
     Returns a dict matching the Report model fields.
     """
-    client = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
-
-    prompt = _build_prompt(
-        github_data=github_data,
-        scoring_result=scoring_result,
-        analysis_results=analysis_results,
-        claimed_level=claimed_level,
-        repo_names=repo_names or [],
-    )
-
     logger.info("Calling Anthropic API (model=%s)...", CLAUDE_MODEL)
 
-    message = await client.messages.create(
-        model=CLAUDE_MODEL,
-        max_tokens=4096,
-        system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": prompt}],
-    )
+    try:
+        client = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
 
-    raw_text = message.content[0].text if message.content else "{}"
-    logger.info("Received %d chars from Anthropic", len(raw_text))
+        prompt = _build_prompt(
+            github_data=github_data,
+            scoring_result=scoring_result,
+            analysis_results=analysis_results,
+            claimed_level=claimed_level,
+            repo_names=repo_names or [],
+        )
+
+        message = await client.messages.create(
+            model=CLAUDE_MODEL,
+            max_tokens=4096,
+            system=SYSTEM_PROMPT,
+            messages=[{"role": "user", "content": prompt}],
+        )
+
+        raw_text = message.content[0].text if message.content else "{}"
+        logger.info("Received %d chars from Anthropic", len(raw_text))
+    except Exception as api_exc:
+        logger.error("Anthropic API call failed: %s", api_exc)
+        return {
+            "strengths": ["Analysis completed — see scores."],
+            "critical_issues": [],
+            "recommendations": [],
+            "radar_data": [],
+            "career_narrative": f"Unable to load AI assessment due to this error: {api_exc}. To resolve, please check your Anthropic API key and billing plan.",
+            "roadmap": [],
+            "job_matches": [],
+            "resume_bullets": [],
+        }
 
     # ── Parse JSON ─────────────────────────────────────────────────────────
     try:

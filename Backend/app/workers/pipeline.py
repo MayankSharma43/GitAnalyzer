@@ -51,6 +51,37 @@ def publish_progress(
         logger.warning("Failed to publish progress event: %s", exc)
 
 
+def mark_audit_failed(audit_id: str, error: str) -> None:
+    """Synchronously mark an audit as failed across DB and websocket."""
+    from app.utils.task_db import task_session
+    from app.utils.task_runner import run_async
+    from app.models.audit import Audit, AuditStatus
+    from sqlalchemy import select
+
+    async def _fail() -> None:
+        async with task_session() as session:
+            result = await session.execute(select(Audit).where(Audit.id == audit_id))
+            audit = result.scalar_one_or_none()
+            if audit:
+                audit.status = AuditStatus.failed
+                audit.error_message = error
+                await session.commit()
+
+    try:
+        run_async(_fail())
+    except Exception as e:
+        logger.error("Could not write failure to DB for %s: %s", audit_id, e)
+        
+    publish_progress(
+        audit_id=audit_id, 
+        step=0, 
+        step_name="Error",
+        message=error, 
+        section="CODE", 
+        status="failed"
+    )
+
+
 def start_audit_pipeline(audit_id: str) -> None:
     """
     Kick off the full analysis pipeline as a Celery chain.

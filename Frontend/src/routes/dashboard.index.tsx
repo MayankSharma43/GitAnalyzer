@@ -1,4 +1,4 @@
-import { createFileRoute, useOutletContext } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import {
   ResponsiveContainer,
   RadarChart,
@@ -12,10 +12,10 @@ import {
 import CountUp from "@/components/animations/CountUp";
 import ClickSpark from "@/components/animations/ClickSpark";
 import { Link } from "@tanstack/react-router";
-import type { DashboardContext } from "./dashboard";
+import { useDashboardContext } from "./dashboard";
 
 function DashboardIndex() {
-  const { report } = useOutletContext<DashboardContext>();
+  const { report } = useDashboardContext();
 
   if (!report) return null;
 
@@ -121,7 +121,7 @@ function DashboardIndex() {
       <section>
         <SectionHeading kicker="02" title="Your biggest problems" />
         <div className="mt-8 space-y-3">
-          {report.critical_issues.slice(0, 3).map((f, i) => {
+          {report.critical_issues.slice(0, 3).map((f: any, i: number) => {
             const accent = f.severity === "CRITICAL" ? "border-l-danger" : "border-l-warning";
             const accentText = f.severity === "CRITICAL" ? "text-danger" : "text-warning";
             return (

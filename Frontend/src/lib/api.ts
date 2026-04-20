@@ -78,6 +78,9 @@ export interface ReportResponse {
   critical_issues: CriticalIssue[];
   recommendations: Recommendation[];
   radar_data: RadarDataPoint[];
+  roadmap: any[];
+  job_matches: any[];
+  resume_bullets: any[];
   career_narrative: string | null;
   repos_analysed: number;
   languages: { name: string; value: number; color: string }[];

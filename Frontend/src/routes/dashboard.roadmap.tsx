@@ -1,14 +1,14 @@
-import { createFileRoute, useOutletContext } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import CountUp from "@/components/animations/CountUp";
 import ClickSpark from "@/components/animations/ClickSpark";
 import { skillROI, weeklyTasks } from "@/lib/mockData";
-import type { DashboardContext } from "./dashboard";
+import { useDashboardContext } from "./dashboard";
 
 function RoadmapPage() {
-  const { report } = useOutletContext<DashboardContext>();
+  const { report } = useDashboardContext();
   const [openWeek, setOpenWeek] = useState<string | null>("Week 1");
   const [done, setDone] = useState<string[]>([]);
 
@@ -84,7 +84,7 @@ function RoadmapPage() {
 
         {realRoadmap.length > 0 && (
           <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {realRoadmap.map((p) => (
+            {realRoadmap.map((p: any) => (
               <div key={p.phase} className="border-l-[2px] border-violet bg-[#0a0a0a] p-5">
                 <div className="font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-violet-glow">
                   {p.phase}

@@ -1,9 +1,9 @@
-import { createFileRoute, useOutletContext } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import CountUp from "@/components/animations/CountUp";
 import { companyArchetypes, skillsHeatmap } from "@/lib/mockData";
-import type { DashboardContext } from "./dashboard";
+import { useDashboardContext } from "./dashboard";
 
 const archetypeColors: Record<string, string> = {
   "Series B startup": "#a78bfa",
@@ -48,7 +48,7 @@ function CircularProgress({ value, size = 180, color = "#a78bfa" }: { value: num
 }
 
 function JobsPage() {
-  const { report } = useOutletContext<DashboardContext>();
+  const { report } = useDashboardContext();
   const [remote, setRemote] = useState(false);
 
   if (!report) return null;
@@ -86,7 +86,7 @@ function JobsPage() {
       <section>
         <SectionLabel kicker="01" title="Roles you qualify for" />
         <div className="mt-6 space-y-2">
-          {realJobMatches.map((j) => {
+          {realJobMatches.map((j: any) => {
             // @ts-ignore
             const min = remote && j.min ? j.min + 5 : j.min;
             // @ts-ignore

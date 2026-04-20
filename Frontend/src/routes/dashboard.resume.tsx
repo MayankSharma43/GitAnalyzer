@@ -1,11 +1,11 @@
-import { createFileRoute, useOutletContext } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import CountUp from "@/components/animations/CountUp";
 import ClickSpark from "@/components/animations/ClickSpark";
 import { repoRecommendations, keywordGap, atsScore } from "@/lib/mockData";
-import type { DashboardContext } from "./dashboard";
+import { useDashboardContext } from "./dashboard";
 
 function CircularProgress({ value, size = 200, color }: { value: number; size?: number; color: string }) {
   const stroke = 12;
@@ -41,7 +41,7 @@ function CircularProgress({ value, size = 200, color }: { value: number; size?: 
 }
 
 function ResumePage() {
-  const { report } = useOutletContext<DashboardContext>();
+  const { report } = useDashboardContext();
   const [copied, setCopied] = useState(false);
 
   if (!report) return null;

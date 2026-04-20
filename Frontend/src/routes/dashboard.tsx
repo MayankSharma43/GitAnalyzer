@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, createContext, useContext } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Sidebar from "@/components/dashboard/Sidebar";
 import MobileNav from "@/components/dashboard/MobileNav";
@@ -8,6 +8,9 @@ import { api, ReportResponse } from "@/lib/api";
 export type DashboardContext = {
   report: ReportResponse | null;
 };
+
+export const DashboardContextObj = createContext<DashboardContext>({ report: null });
+export const useDashboardContext = () => useContext(DashboardContextObj);
 
 function DashboardLayout() {
   const { pathname } = useLocation();
@@ -55,7 +58,9 @@ function DashboardLayout() {
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.35, ease: "easeOut" }}
             >
-              <Outlet context={{ report }} />
+              <DashboardContextObj.Provider value={{ report }}>
+                <Outlet />
+              </DashboardContextObj.Provider>
             </motion.div>
           </AnimatePresence>
         </main>
